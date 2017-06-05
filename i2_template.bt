@@ -1,0 +1,40 @@
+//------------------------------------------------
+//--- 010 Editor v7.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct FILE {
+    struct HEADER {
+        FSeek(74);
+        char device[8]; // Must be 'ADL' for compatability
+
+        FSeek(94);
+        char date[10]; // day/month/year
+
+        FSeek(126);
+        char time_24h[8]; // eg: 19:03:44
+
+        FSeek(158);
+        char driverName[63];
+
+        FSeek(222);
+        char vehicle[63];
+
+        FSeek(350);
+        char venue[63];
+
+        FSeek(1572);
+        char comment[63]; // Mu uses this field for setup filename
+
+        FSeek(4918);
+        char venue_ticker[63]; // Venue shown in i2 ticker, above laps bar
+    } header;
+} file;

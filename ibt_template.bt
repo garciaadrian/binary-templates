@@ -1,0 +1,76 @@
+//------------------------------------------------
+//--- 010 Editor v7.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+#define IRSDK_MAX_DESC 64
+#define IRSDK_MAX_STRING 32 // eg: "kg/m^2"
+
+
+struct FILE {
+    struct HEADER {
+        int version;
+        int status;
+        int tickRate;
+        
+        int sesionInfoUpdate;
+        int sessionInfoLen;
+        int sessionInfoOffset;
+
+        int numVars;
+        int varHeaderOffset;
+        
+        int numBuf;
+        int bufLen;
+        int pad1[2];
+
+        struct IRSDK_VARBUF {
+            int tickCount;
+            int bufOffset;
+            int pad[2];
+        } irsdk_varBuf[4];
+
+        struct IRSDK_DISSUBHEADER {
+            time_t sessionStartDate;
+            double sessionStartTime;
+            double sessionEndTime;
+            int sessionLapCount;
+            int sessionRecordCount;
+        } irsdk_diskSubHeader;
+
+       struct stringInfo(int length) {
+            char Info[length];
+        };
+
+        // Move read position to x bytes ahead minus
+        // current position to get a specific offset.
+        // Just learned about FSeek...
+        FSkip(header.sessionInfoOffset - FTell());
+
+        stringInfo Info(header.sessionInfoLen);
+
+        struct irsdk_varHeader {
+            int type;
+            int offset;
+            int count;
+
+            int pad[1];
+
+            char name[IRSDK_MAX_STRING];
+            char desc[IRSDK_MAX_DESC];
+            char unit[IRSDK_MAX_STRING];
+        };
+
+        FSkip(header.varHeaderOffset - FTell());
+        irsdk_varHeader varHeader[header.numVars];
+    } header;
+} file;
+

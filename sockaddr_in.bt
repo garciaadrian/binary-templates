@@ -1,0 +1,37 @@
+//------------------------------------------------
+//--- 010 Editor v7.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+
+// Internet address
+struct in_addr {
+    union {
+        struct {
+            uchar s_b1, s_b2, s_b3, s_b4;
+        } S_un_b;
+        struct {
+            ushort s_w1, s_w2;
+        } S_un_w;
+        ulong S_addr;
+    } S_un;
+};
+
+struct FILE {
+    struct SOCKADDR_IN {
+        short sin_family;
+        enum <ushort> SIN_PORT { // port in network byte order
+            RANDOM_PORT = 0,
+        } sin_port;
+        struct in_addr sin_addr; // internet address
+        char sin_zero[8];
+    } sockaddr_in;
+} file;
